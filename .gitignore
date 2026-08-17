@@ -1,0 +1,16 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Large original PDF
+Econ_Midterm.pdf
+
+# Extraction and scratch scripts/data
+generate_md.py
+all_questions.json
+part3_extracted.json
+part3_extracted.md
+part4_extracted.json
+
+# Local environment / Vercel
+.vercel

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ระบบทำข้อสอบและเฉลยละเอียด วิชาเศรษฐศาสตร์เพื่อการดำเนินชีวิตที่ดี (Midterm Examination)">
+  <title>ระบบทำข้อสอบวิชาเศรษฐศาสตร์เพื่อการดำเนินชีวิตที่ดี (Midterm Exam)</title>
+  <!-- Google Fonts: Sarabun & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sarabun:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app" class="app-container">
+    <!-- TOP HEADER -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="brand-badge">
+          <i data-lucide="graduation-cap" class="brand-icon"></i>
+          <span>EdTech Exam</span>
+        </div>
+        <div class="header-title-wrap">
+          <h1 class="exam-title">เศรษฐศาสตร์เพื่อการดำเนินชีวิตที่ดี</h1>
+          <span class="exam-subtitle">แบบทดสอบกลางภาค (Midterm Examination) • 120 ข้อ</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Timer -->
+        <div class="timer-card" id="timerCard" title="เวลาที่เหลือในการทำข้อสอบ">
+          <i data-lucide="clock" class="timer-icon"></i>
+          <span id="timerDisplay" class="timer-text">02:00:00</span>
+        </div>
+
+        <!-- Theme Toggle -->
+        <button id="btnThemeToggle" class="btn-icon" aria-label="Toggle Theme" title="สลับโหมดมืด/สว่าง">
+          <i data-lucide="sun" class="sun-icon"></i>
+          <i data-lucide="moon" class="moon-icon"></i>
+        </button>
+
+        <!-- Submit Button -->
+        <button id="btnHeaderSubmit" class="btn btn-primary btn-submit-exam">
+          <i data-lucide="check-circle-2"></i>
+          <span>ส่งข้อสอบ</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- EXAM VIEW (WHEN TAKING TEST) -->
+    <main id="examView" class="main-layout">
+      <!-- LEFT: QUESTION AREA -->
+      <section class="question-pane">
+        <!-- Progress Bar -->
+        <div class="progress-bar-container">
+          <div class="progress-info">
+            <span id="progressText" class="progress-label">ความคืบหน้า: 0 / 120 ข้อ (0%)</span>
+            <span id="flaggedCountBadge" class="flagged-badge">
+              <i data-lucide="bookmark"></i> ปักหมุด <span id="flaggedCount">0</span> ข้อ
+            </span>
+          </div>
+          <div class="progress-track">
+            <div id="progressBarFill" class="progress-fill" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <!-- Question Card -->
+        <div class="question-card" id="questionCard">
+          <div class="question-card-header">
+            <div class="q-meta">
+              <span id="qNumberBadge" class="q-number-badge">ข้อที่ 1</span>
+              <span id="qTopicTag" class="q-topic-tag">เศรษฐศาสตร์ทั่วไป</span>
+            </div>
+            <div class="q-actions">
+              <button id="btnFlag" class="btn-pill" title="ปักหมุดข้อนี้เพื่อกลับมาทบทวนภายหลัง (คีย์ลัด: F)">
+                <i data-lucide="bookmark" class="pill-icon"></i>
+                <span id="flagBtnLabel">ปักหมุดทบทวน</span>
+              </button>
+              <button id="btnClearAnswer" class="btn-pill btn-pill-danger" title="ล้างคำตอบที่เลือกในข้อนี้">
+                <i data-lucide="rotate-ccw" class="pill-icon"></i>
+                <span>ล้างคำตอบ</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Question Body -->
+          <div class="question-body">
+            <h2 id="questionText" class="question-text">กำลังโหลดข้อความคำถาม...</h2>
+            
+            <!-- Optional Diagram / Image Container -->
+            <div id="questionDiagramWrap" class="diagram-wrapper" style="display: none;">
+              <div id="questionDiagramSvg" class="diagram-svg-box"></div>
+            </div>
+
+            <!-- Options List -->
+            <div id="optionsList" class="options-container" role="radiogroup">
+              <!-- Options rendered dynamically -->
+            </div>
+          </div>
+
+          <!-- Question Footer / Navigation -->
+          <div class="question-card-footer">
+            <button id="btnPrev" class="btn btn-secondary">
+              <i data-lucide="arrow-left"></i>
+              <span>ข้อก่อนหน้า</span>
+            </button>
+
+            <div class="nav-hint">
+              <span>แป้นลัด: <strong>1-4</strong> เลือกคำตอบ | <strong>← →</strong> เปลี่ยนข้อ | <strong>F</strong> ปักหมุด</span>
+            </div>
+
+            <button id="btnNext" class="btn btn-primary">
+              <span>ข้อถัดไป</span>
+              <i data-lucide="arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT: QUESTION PALETTE SIDEBAR -->
+      <aside class="sidebar-pane">
+        <div class="palette-card">
+          <div class="palette-header">
+            <h3 class="palette-title">
+              <i data-lucide="layout-grid"></i>
+              <span>สารบัญข้อสอบ (120 ข้อ)</span>
+            </h3>
+            <button id="btnPaletteToggle" class="palette-toggle-btn" aria-label="Toggle Palette">
+              <i data-lucide="chevron-down"></i>
+            </button>
+          </div>
+
+          <!-- Legend -->
+          <div class="palette-legend">
+            <div class="legend-item"><span class="legend-dot answered"></span><span>ตอบแล้ว</span></div>
+            <div class="legend-item"><span class="legend-dot flagged"></span><span>ปักหมุด</span></div>
+            <div class="legend-item"><span class="legend-dot unanswered"></span><span>ยังไม่ตอบ</span></div>
+            <div class="legend-item"><span class="legend-dot current"></span><span>กำลังทำ</span></div>
+          </div>
+
+          <!-- Filter Tabs for Palette -->
+          <div class="palette-filters">
+            <button class="filter-tab active" data-filter="all">ทั้งหมด</button>
+            <button class="filter-tab" data-filter="unanswered">ยังไม่ทำ</button>
+            <button class="filter-tab" data-filter="flagged">ปักหมุด</button>
+            <button class="filter-tab" data-filter="answered">ทำแล้ว</button>
+          </div>
+
+          <!-- Grid of Numbers -->
+          <div id="paletteGrid" class="palette-grid">
+            <!-- Populated via JavaScript -->
+          </div>
+
+          <!-- Sidebar Footer Controls -->
+          <div class="sidebar-footer">
+            <button id="btnResetExam" class="btn btn-ghost-danger">
+              <i data-lucide="trash-2"></i>
+              <span>เริ่มทำใหม่ทั้งหมด</span>
+            </button>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- RESULT & REVIEW VIEW (AFTER SUBMISSION) -->
+    <main id="resultView" class="result-layout" style="display: none;">
+      <div class="result-container">
+        <!-- Result Summary Hero -->
+        <section class="result-hero-card">
+          <div class="hero-left">
+            <div class="score-circle-wrap">
+              <svg class="score-svg" viewBox="0 0 120 120">
+                <circle class="score-circle-bg" cx="60" cy="60" r="52"></circle>
+                <circle id="scoreCircleFill" class="score-circle-fill" cx="60" cy="60" r="52"></circle>
+              </svg>
+              <div class="score-center-text">
+                <span id="scorePercent" class="score-percent-val">0%</span>
+                <span class="score-percent-sub">คะแนนที่ได้</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-right">
+            <div class="grade-badge" id="gradeBadge">กำลังประมวลผล</div>
+            <h2 class="result-title">ผลการทดสอบวิชาเศรษฐศาสตร์</h2>
+            <p class="result-desc" id="resultFeedbackText">คุณได้ส่งข้อสอบเรียบร้อยแล้ว ตรวจสอบผลการวิเคราะห์และดูเฉลยละเอียดได้ด้านล่าง</p>
+            
+            <div class="result-stats-row">
+              <div class="stat-pill stat-correct">
+                <i data-lucide="check"></i>
+                <div>
+                  <span class="stat-val" id="statCorrect">0</span>
+                  <span class="stat-lbl">ข้อที่ถูก</span>
+                </div>
+              </div>
+              <div class="stat-pill stat-wrong">
+                <i data-lucide="x"></i>
+                <div>
+                  <span class="stat-val" id="statWrong">0</span>
+                  <span class="stat-lbl">ข้อที่ผิด</span>
+                </div>
+              </div>
+              <div class="stat-pill stat-time">
+                <i data-lucide="clock"></i>
+                <div>
+                  <span class="stat-val" id="statTimeSpent">00:00</span>
+                  <span class="stat-lbl">เวลาที่ใช้</span>
+                </div>
+              </div>
+              <div class="stat-pill stat-total">
+                <i data-lucide="award"></i>
+                <div>
+                  <span class="stat-val" id="statTotalScore">0 / 120</span>
+                  <span class="stat-lbl">คะแนนรวม</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="result-actions-row">
+              <button id="btnScrollToReview" class="btn btn-primary">
+                <i data-lucide="book-open"></i>
+                <span>ตรวจเฉลยละเอียดทุกข้อ</span>
+              </button>
+              <button id="btnRetakeExam" class="btn btn-secondary">
+                <i data-lucide="rotate-ccw"></i>
+                <span>ทำข้อสอบใหม่อีกครั้ง</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- REVIEW LIST SECTION -->
+        <section class="review-section" id="reviewSection">
+          <div class="review-header">
+            <div class="review-header-left">
+              <h3 class="section-heading">
+                <i data-lucide="file-check"></i>
+                <span>เฉลยข้อสอบและคำอธิบายอย่างละเอียด</span>
+              </h3>
+              <p class="section-subheading">แสดงตัวเลือกที่ถูกต้องพร้อมเหตุผลทางเศรษฐศาสตร์</p>
+            </div>
+
+            <!-- Review Filters -->
+            <div class="review-filters">
+              <button class="review-tab active" data-filter="all">ทั้งหมด (120)</button>
+              <button class="review-tab" data-filter="correct">ถูกเฉพาะ (<span id="revCorrectCount">0</span>)</button>
+              <button class="review-tab" data-filter="wrong">ผิดเฉพาะ (<span id="revWrongCount">0</span>)</button>
+              <button class="review-tab" data-filter="flagged">ปักหมุด (<span id="revFlaggedCount">0</span>)</button>
+            </div>
+          </div>
+
+          <!-- Review List Container -->
+          <div id="reviewCardsContainer" class="review-cards-list">
+            <!-- Populated via JavaScript -->
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- SUBMIT CONFIRMATION MODAL -->
+    <div id="submitModal" class="modal-backdrop" style="display: none;">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-icon-wrap warning">
+            <i data-lucide="alert-triangle"></i>
+          </div>
+          <h3 class="modal-title">ยืนยันการส่งข้อสอบ?</h3>
+        </div>
+        <div class="modal-body">
+          <p id="modalSummaryText">คุณกำลังจะส่งข้อสอบระบบจะทำการตรวจและคำนวณคะแนนทันที</p>
+          <div class="modal-stats-box">
+            <div class="mstat-item">
+              <span class="mstat-label">ตอบแล้ว:</span>
+              <strong id="modalAnsweredCount" class="mstat-val answered-text">0 ข้อ</strong>
+            </div>
+            <div class="mstat-item">
+              <span class="mstat-label">ยังไม่ได้ตอบ:</span>
+              <strong id="modalUnansweredCount" class="mstat-val warning-text">0 ข้อ</strong>
+            </div>
+            <div class="mstat-item">
+              <span class="mstat-label">ปักหมุดทบทวน:</span>
+              <strong id="modalFlaggedCount" class="mstat-val">0 ข้อ</strong>
+            </div>
+          </div>
+          <p class="modal-subtext">เมื่อกดส่งข้อสอบแล้ว จะไม่สามารถกลับมาแก้ไขคำตอบได้</p>
+        </div>
+        <div class="modal-footer">
+          <button id="btnModalCancel" class="btn btn-secondary">กลับไปทำต่อ</button>
+          <button id="btnModalConfirm" class="btn btn-primary btn-danger">ยืนยันส่งข้อสอบ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load Data and Application Logic -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
