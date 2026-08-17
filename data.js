@@ -1,6 +1,6 @@
 // Economics Midterm Exam Data (120 Questions)
 // Source: Econ_Midterm.pdf
-const EXAM_DATA = [
+window.EXAM_DATA = [
   {
     "number": 6,
     "question": "ความเป็นธรรมในการค้า หมายถึงอะไร?",

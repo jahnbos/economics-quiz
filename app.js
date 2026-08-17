@@ -99,9 +99,9 @@
 
 
   // --- Initializer ---
-  function init() {
+  async function init() {
     loadTheme();
-    loadQuestions();
+    await loadQuestions();
     loadStateFromStorage();
     bindEvents();
     renderCurrentQuestion();
@@ -132,13 +132,39 @@
     localStorage.setItem(STORAGE_KEYS.THEME, state.theme);
   }
 
-  // --- Load Questions from data.js ---
-  function loadQuestions() {
-    if (window.EXAM_DATA && Array.isArray(window.EXAM_DATA)) {
-      state.questions = window.EXAM_DATA;
-    } else {
-      console.error('EXAM_DATA not found. Please ensure data.js is loaded.');
+  // --- Load Questions from data.js or all_questions.json fallback ---
+  async function loadQuestions() {
+    let data = null;
+    if (typeof window !== 'undefined' && window.EXAM_DATA && Array.isArray(window.EXAM_DATA)) {
+      data = window.EXAM_DATA;
+    } else if (typeof EXAM_DATA !== 'undefined' && Array.isArray(EXAM_DATA)) {
+      data = EXAM_DATA;
     }
+
+    if (data && data.length > 0) {
+      state.questions = data;
+      return true;
+    }
+
+    // Fallback: try fetching all_questions.json
+    try {
+      const response = await fetch('all_questions.json');
+      if (response.ok) {
+        const jsonData = await response.json();
+        if (Array.isArray(jsonData) && jsonData.length > 0) {
+          state.questions = jsonData;
+          renderCurrentQuestion();
+          renderPalette();
+          updateProgress();
+          return true;
+        }
+      }
+    } catch (err) {
+      console.warn('Fallback fetch failed:', err);
+    }
+
+    console.error('EXAM_DATA not found. Please ensure data.js is loaded.');
+    return false;
   }
 
   // --- State Persistence (LocalStorage) ---
