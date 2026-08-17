@@ -15,7 +15,7 @@
     THEME: 'econ_exam_theme_v1'
   };
 
-  const DEFAULT_DURATION_SECONDS = 2 * 60 * 60; // 2 Hours (120 minutes)
+  const DEFAULT_DURATION_SECONDS = 3 * 60 * 60; // 3 Hours (180 minutes)
   const OPTION_LETTERS = ['A', 'B', 'C', 'D', 'E'];
 
   // --- Application State ---
@@ -96,107 +96,7 @@
     revFlaggedCount: document.getElementById('revFlaggedCount')
   };
 
-  // --- SVG Diagram Renderers for Economics Questions ---
-  function getDiagramSvg(questionNumber, questionText) {
-    // Standard Demand and Supply Curve SVG Generator
-    const textLower = (questionText || '').toLowerCase();
-    
-    // Check if question involves P1, P2, A1, A2 or Equilibrium graphs
-    if (questionNumber === 21 || textLower.includes('เส้น a2')) {
-      return `
-        <svg width="340" height="240" viewBox="0 0 340 240">
-          <rect width="100%" height="100%" fill="var(--bg-surface)" rx="8"/>
-          <!-- Axes -->
-          <line x1="50" y1="20" x2="50" y2="200" stroke="var(--text-main)" stroke-width="2"/>
-          <line x1="50" y1="200" x2="300" y2="200" stroke="var(--text-main)" stroke-width="2"/>
-          <text x="35" y="30" fill="var(--text-main)" font-size="14" font-weight="bold">P</text>
-          <text x="290" y="220" fill="var(--text-main)" font-size="14" font-weight="bold">Q</text>
-          
-          <!-- Supply curve A1 -->
-          <line x1="70" y1="180" x2="270" y2="40" stroke="#0284c7" stroke-width="2.5"/>
-          <text x="275" y="45" fill="#0284c7" font-size="14" font-weight="bold">A1 (Supply)</text>
-          
-          <!-- Demand curve A2 -->
-          <line x1="70" y1="40" x2="270" y2="180" stroke="#ef4444" stroke-width="2.5"/>
-          <text x="275" y="185" fill="#ef4444" font-size="14" font-weight="bold">A2 (Demand)</text>
-          
-          <!-- Equilibrium E -->
-          <circle cx="170" cy="110" r="5" fill="#10b981"/>
-          <text x="178" y="105" fill="#10b981" font-size="12" font-weight="bold">E (จุดดุลยภาพ)</text>
-        </svg>
-      `;
-    }
 
-    if (textLower.includes('p2') || textLower.includes('ระดับ p2') || questionNumber === 119 || questionNumber === 92) {
-      return `
-        <svg width="340" height="240" viewBox="0 0 340 240">
-          <rect width="100%" height="100%" fill="var(--bg-surface)" rx="8"/>
-          <!-- Axes -->
-          <line x1="50" y1="20" x2="50" y2="200" stroke="var(--text-main)" stroke-width="2"/>
-          <line x1="50" y1="200" x2="300" y2="200" stroke="var(--text-main)" stroke-width="2"/>
-          <text x="35" y="30" fill="var(--text-main)" font-size="14" font-weight="bold">P</text>
-          <text x="290" y="220" fill="var(--text-main)" font-size="14" font-weight="bold">Q</text>
-          
-          <!-- Supply and Demand -->
-          <line x1="70" y1="180" x2="270" y2="40" stroke="#0284c7" stroke-width="2"/>
-          <text x="275" y="45" fill="#0284c7" font-size="13">S</text>
-          <line x1="70" y1="40" x2="270" y2="180" stroke="#ef4444" stroke-width="2"/>
-          <text x="275" y="185" fill="#ef4444" font-size="13">D</text>
-          
-          <!-- Price P2 below equilibrium -->
-          <line x1="50" y1="150" x2="230" y2="150" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4"/>
-          <text x="25" y="155" fill="#f59e0b" font-size="13" font-weight="bold">P2</text>
-          
-          <!-- Intersections -->
-          <circle cx="113" cy="150" r="4" fill="#0284c7"/>
-          <circle cx="227" cy="150" r="4" fill="#ef4444"/>
-          <line x1="113" y1="150" x2="113" y2="200" stroke="var(--text-muted)" stroke-width="1.5" stroke-dasharray="3"/>
-          <line x1="227" y1="150" x2="227" y2="200" stroke="var(--text-muted)" stroke-width="1.5" stroke-dasharray="3"/>
-          <text x="108" y="215" fill="var(--text-muted)" font-size="12">Q1</text>
-          <text x="222" y="215" fill="var(--text-muted)" font-size="12">Q2</text>
-          
-          <!-- Excess Demand Bracket -->
-          <text x="125" y="140" fill="#f59e0b" font-size="11" font-weight="bold">อุปสงค์ส่วนเกิน (ขาดตลาด)</text>
-        </svg>
-      `;
-    }
-
-    if (textLower.includes('p1') || textLower.includes('ระดับ p1') || questionNumber === 47 || questionNumber === 53 || questionNumber === 57 || questionNumber === 79 || questionNumber === 80 || questionNumber === 94) {
-      return `
-        <svg width="340" height="240" viewBox="0 0 340 240">
-          <rect width="100%" height="100%" fill="var(--bg-surface)" rx="8"/>
-          <!-- Axes -->
-          <line x1="50" y1="20" x2="50" y2="200" stroke="var(--text-main)" stroke-width="2"/>
-          <line x1="50" y1="200" x2="300" y2="200" stroke="var(--text-main)" stroke-width="2"/>
-          <text x="35" y="30" fill="var(--text-main)" font-size="14" font-weight="bold">P</text>
-          <text x="290" y="220" fill="var(--text-main)" font-size="14" font-weight="bold">Q</text>
-          
-          <!-- Curves -->
-          <line x1="70" y1="180" x2="270" y2="40" stroke="#0284c7" stroke-width="2"/>
-          <text x="275" y="45" fill="#0284c7" font-size="13">S</text>
-          <line x1="70" y1="40" x2="270" y2="180" stroke="#ef4444" stroke-width="2"/>
-          <text x="275" y="185" fill="#ef4444" font-size="13">D</text>
-          
-          <!-- Price P1 above equilibrium -->
-          <line x1="50" y1="70" x2="230" y2="70" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="4"/>
-          <text x="25" y="75" fill="#8b5cf6" font-size="13" font-weight="bold">P1</text>
-          
-          <!-- Intersections -->
-          <circle cx="113" cy="70" r="4" fill="#ef4444"/>
-          <circle cx="227" cy="70" r="4" fill="#0284c7"/>
-          <line x1="113" y1="70" x2="113" y2="200" stroke="var(--text-muted)" stroke-width="1.5" stroke-dasharray="3"/>
-          <line x1="227" y1="70" x2="227" y2="200" stroke="var(--text-muted)" stroke-width="1.5" stroke-dasharray="3"/>
-          <text x="108" y="215" fill="var(--text-muted)" font-size="12">Q1</text>
-          <text x="222" y="215" fill="var(--text-muted)" font-size="12">Q2</text>
-          
-          <!-- Excess Supply Bracket -->
-          <text x="125" y="60" fill="#8b5cf6" font-size="11" font-weight="bold">อุปทานส่วนเกิน (ล้นตลาด)</text>
-        </svg>
-      `;
-    }
-
-    return null;
-  }
 
   // --- Initializer ---
   function init() {
@@ -323,10 +223,9 @@
     // Question Text
     DOM.questionText.textContent = q.question;
 
-    // Check Diagram
-    const diagramSvg = getDiagramSvg(q.number, q.question);
-    if (diagramSvg) {
-      DOM.questionDiagramSvg.innerHTML = diagramSvg;
+    // Check Diagram / Image
+    if (q.image) {
+      DOM.questionDiagramSvg.innerHTML = `<img src="${q.image}" alt="รูปภาพประกอบข้อสอบข้อที่ ${q.number}" class="question-diagram-img" loading="lazy">`;
       DOM.questionDiagramWrap.style.display = 'flex';
     } else {
       DOM.questionDiagramWrap.style.display = 'none';
@@ -569,7 +468,9 @@
       const card = document.createElement('div');
       card.className = `review-card ${isCorrect ? 'is-correct' : 'is-wrong'}`;
 
-      const diagramSvg = getDiagramSvg(q.number, q.question);
+      const imageHtml = q.image
+        ? `<div class="diagram-wrapper" style="margin-bottom: 1.25rem;"><div class="diagram-svg-box"><img src="${q.image}" alt="รูปภาพประกอบข้อสอบข้อที่ ${q.number}" class="question-diagram-img" loading="lazy"></div></div>`
+        : '';
 
       let optionsHtml = '';
       q.options.forEach((optText, optIdx) => {
@@ -611,8 +512,7 @@
         </div>
 
         <h3 class="question-text" style="font-size: 1.1rem;">${q.question}</h3>
-
-        ${diagramSvg ? `<div class="diagram-wrapper"><div class="diagram-svg-box">${diagramSvg}</div></div>` : ''}
+        ${imageHtml}
 
         <div class="review-options">
           ${optionsHtml}

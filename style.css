@@ -499,16 +499,31 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1.25rem;
+  padding: 1rem;
   background: var(--bg-muted);
   border-radius: var(--radius-md);
   border: 1px solid var(--border-subtle);
+  overflow: hidden;
 }
 
-.diagram-svg-box svg {
+.diagram-svg-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.diagram-svg-box svg,
+.question-diagram-img {
   max-width: 100%;
+  max-height: 280px;
   height: auto;
   display: block;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  background: #ffffff;
+  padding: 0.5rem;
+  box-shadow: var(--shadow-sm);
 }
 
 /* Options Container */
